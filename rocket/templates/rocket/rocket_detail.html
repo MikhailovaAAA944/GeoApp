@@ -1,0 +1,33 @@
+{% extends 'rocket/base.html' %}
+{% block content %}
+
+
+<style>     
+    .rocket-name {
+        font-weight: bold;
+        color: #0d6efd;
+        }
+     .rocket-description {
+         color: #6c757d;
+         font-size: 1rem;
+        }
+     .rocket-img {
+            object-fit: cover;
+            width: 30%;
+            height: 30%;
+        }   
+</style>
+<div class="container ">
+ <div class="row">
+      <div class="col">
+        <h3 class="rocket-name">{{rocket.name}}</h3>
+          <div class="rocket-img-container">
+                            <img {% if rocket.imagerocket %} src="{{ rocket.imagerocket.url }}" {% endif %}class="rocket-img " alt={{rocket.name}}>
+                        </div>
+        <p class="rocket-description ">{{rocket.description}}</p>
+     </div>
+ </div>
+</div>
+
+
+{% endblock%}

@@ -41,14 +41,14 @@
 
             {% for r in rockets %}
             <div class="col">
-                <a href="#" class="text-decoration-none">
+                <a href="{% url "rocket_detail" pk=r.pk %}" class="text-decoration-none">
                     <div class="card rocket-card h-100">
                         <div class="rocket-img-container">
                             <img {% if r.imagerocket %} src="{{ r.imagerocket.url }}" {% endif %}class="rocket-img" alt={{r.name}}>
                         </div>
                         <div class="card-body">
                             <h5 class="rocket-name card-title">{{r.name}}</h5>
-                            <p class="rocket-description card-text">{{r.description}}</p>
+                            <p class="rocket-description card-text">{{r.short_description}}</p>
                         </div>
                     </div>
                 </a>

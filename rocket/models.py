@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 
 class LaunchVehicle(models.Model):
     name = models.CharField(max_length=100, verbose_name="Название")
+    short_description = models.TextField(blank=True, null=True, verbose_name="Краткое описание")
     description = models.TextField(blank=True, null=True, verbose_name="Описание")
     gto_playload = models.IntegerField(verbose_name="Полезная нагрузка (кг)")
     imagerocket = models.ImageField(verbose_name="Изображение",upload_to="rockets/",blank=True, null=True)

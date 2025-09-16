@@ -1,11 +1,33 @@
 {% extends 'rocket/base.html' %}
 
 {% block content %}
-<form method="post">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit" class="btn btn-success">
-        <i class="bi-calculator"></i> Рассчитать
-    </button>
-</form>
+
+<style>
+    #id_comment{
+        height: 34px;
+    }
+</style>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white py-3">
+                    <h4 class="card-title mb-0 text-center">
+                        <i class="bi bi-rocket me-2"></i>Заявка на расчет
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi-calculator"></i> Рассчитать
+                    </button>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock%}

@@ -125,3 +125,7 @@ MEDIA_ROOT = (BASE_DIR / 'media')
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Константы для расчетов
+GRAVITATIONAL_CONSTANT = 6.67430e-11  # м³·кг⁻¹·с⁻²
+PAYLOAD_COEFFICIENT = 0.3  # Эмпирический коэффициент для расчета ПН
