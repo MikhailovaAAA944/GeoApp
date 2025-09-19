@@ -1,5 +1,21 @@
 import math
 from django.conf import settings
+from django.contrib.auth import get_user_model
+from rocket.models import CalculationRequest
+
+
+User = get_user_model()
+
+@property
+def get_user_calc_request_count(self):
+    try:
+        result = CalculationRequest.objects.filter(user=self).count()
+    except:
+        result = 0
+    return result
+
+
+User.add_to_class("get_request_count", get_user_calc_request_count)
 
 
 def calculate_payload(launch_vehicle, port):

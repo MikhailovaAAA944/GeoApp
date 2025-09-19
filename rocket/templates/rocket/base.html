@@ -18,7 +18,14 @@
       <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
         <li><a href="{% url "list_rocket" %}" class="nav-link px-2 link-secondary">Главная</a></li>
         <li><a href="{% url "playload_calculation" %}" class="nav-link px-2 link-dark">Расчет</a></li>
-        <li><a href="{% url "my_calculation" %}" class="nav-link px-2 link-dark">Мои расчеты</a></li>
+        <li><a href="{% url "my_calculation" %}" class="nav-link px-2 link-dark">
+          Мои расчеты
+          {% if user.get_request_count %}
+            <span class="top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              {{user.get_request_count}} 
+            </span>
+          {% endif %}
+        </a></li>
        
       </ul>
 

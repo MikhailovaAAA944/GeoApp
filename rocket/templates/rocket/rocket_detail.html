@@ -21,6 +21,7 @@
  <div class="row">
       <div class="col">
         <h3 class="rocket-name">{{rocket.name}}</h3>
+        <a href="{% url "playload_calculation" %}" class="btn btn-primary float-end">Расчитать</a>
           <div class="rocket-img-container">
                             <img {% if rocket.imagerocket %} src="{{ rocket.imagerocket.url }}" {% endif %}class="rocket-img " alt={{rocket.name}}>
                         </div>
