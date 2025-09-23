@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'storages',
     'rocket',
 ]
 
@@ -143,7 +143,7 @@ STATIC_URL = 'static/'
 STATIC_ROOT = (BASE_DIR / 'static')
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = (BASE_DIR / 'media')
+# MEDIA_ROOT = (BASE_DIR / 'media')
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
@@ -152,3 +152,40 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Константы для расчетов
 GRAVITATIONAL_CONSTANT = 6.67430e-11  # м³·кг⁻¹·с⁻²
 PAYLOAD_COEFFICIENT = 0.3  # Эмпирический коэффициент для расчета ПН
+
+
+
+# =============================================================================
+# MinIO CS3 настройки
+# =============================================================================
+
+
+# Конфигурация хранилищ для Django 4.2+
+STORAGES = {
+    # Статические файлы - обычная файловая система
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+    # Медиафайлы - MinIO S3
+    "default": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            # Настройки доступа
+            "access_key": env('MINIO_ACCESS_KEY', default='minio'),
+            "secret_key": env('MINIO_SECRET_KEY', default='minio124'),
+            "bucket_name": env('MINIO_BUCKET_NAME', default='django-media'),
+            "endpoint_url": env('MINIO_ENDPOINT_URL', default='http://localhost:9000'),
+            
+            # Настройки совместимости с MinIO
+            "use_ssl": env.bool('MINIO_USE_SSL', default=False),
+            "verify": env.bool('MINIO_VERIFY_SSL', default=False),
+            # "region_name": env('MINIO_REGION', default='us-east-1'),
+            "addressing_style": 'path',  # Важно для MinIO
+            
+            # Настройки поведения
+            "file_overwrite": False,
+            "querystring_auth": False,  # Упрощает отладку
+            "default_acl": 'public-read',
+        },
+    },
+}
