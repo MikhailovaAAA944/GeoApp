@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_minio_backend',
+    'storages',
     'rocket',
 ]
 
@@ -143,7 +143,7 @@ STATIC_URL = 'static/'
 STATIC_ROOT = (BASE_DIR / 'static')
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = (BASE_DIR / 'media')
+# MEDIA_ROOT = (BASE_DIR / 'media')
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
@@ -155,81 +155,37 @@ PAYLOAD_COEFFICIENT = 0.3  # Эмпирический коэффициент д�
 
 
 
-from datetime import timedelta
-from typing import List, Tuple
+# =============================================================================
+# MinIO CS3 настройки
+# =============================================================================
 
 
-MINIO_ENDPOINT = 'localhost:9000'
-MINIO_ACCESS_KEY = 'minio'
-MINIO_SECRET_KEY = 'minio124'
-MINIO_USE_HTTPS = False
-
-
-# MINIO_EXTERNAL_ENDPOINT = "localhost:9000"  # Default is same as MINIO_ENDPOINT
-# MINIO_EXTERNAL_ENDPOINT_USE_HTTPS = False  # Default is same as MINIO_USE_HTTPS
-# MINIO_REGION = 'us-east-1'  # Default is set to None
-# MINIO_URL_EXPIRY_HOURS = timedelta(days=1)  # Default is 7 days (longest) if not defined
-# MINIO_CONSISTENCY_CHECK_ON_START = False
-
-# Bucket names
-MINIO_MEDIA_BUCKET = 'django-media'
-MINIO_STATIC_BUCKET = 'django-static'
-
-MINIO_PRIVATE_BUCKETS = [
-    MINIO_MEDIA_BUCKET
-]
-MINIO_PUBLIC_BUCKETS = [
-   MINIO_STATIC_BUCKET
-]
- 
-MINIO_BUCKET_CHECK_ON_SAVE = True 
-
-
- 
+# Конфигурация хранилищ для Django 4.2+
 STORAGES = {
-    "default": {
-        "BACKEND": "django_minio_backend.models.MinioBackend",
-        "OPTIONS": {
-            "bucket_name": MINIO_MEDIA_BUCKET,
-            "base_url": f"http://localhost:9000/{MINIO_MEDIA_BUCKET}/",
-            "endpoint": MINIO_ENDPOINT,
-            "access_key": MINIO_ACCESS_KEY,
-            "secret_key": MINIO_SECRET_KEY,
-            "secure": MINIO_USE_HTTPS,
-        }
-    },
+    # Статические файлы - обычная файловая система
     "staticfiles": {
-        "BACKEND": "django_minio_backend.models.MinioBackendStatic",
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+    # Медиафайлы - MinIO S3
+    "default": {
+        "BACKEND": "storages.backends.s3.S3Storage",
         "OPTIONS": {
-            "bucket_name": MINIO_STATIC_BUCKET,
-            "base_url": f"http://localhost:9000/{MINIO_STATIC_BUCKET}/",
-            "endpoint": MINIO_ENDPOINT,
-            "access_key": MINIO_ACCESS_KEY,
-            "secret_key": MINIO_SECRET_KEY,
-            "secure": MINIO_USE_HTTPS,
-        }
-    }
+            # Настройки доступа
+            "access_key": env('MINIO_ACCESS_KEY', default='minio'),
+            "secret_key": env('MINIO_SECRET_KEY', default='minio124'),
+            "bucket_name": env('MINIO_BUCKET_NAME', default='django-media'),
+            "endpoint_url": env('MINIO_ENDPOINT_URL', default='http://localhost:9000'),
+            
+            # Настройки совместимости с MinIO
+            "use_ssl": env.bool('MINIO_USE_SSL', default=False),
+            "verify": env.bool('MINIO_VERIFY_SSL', default=False),
+            # "region_name": env('MINIO_REGION', default='us-east-1'),
+            "addressing_style": 'path',  # Важно для MinIO
+            
+            # Настройки поведения
+            "file_overwrite": False,
+            "querystring_auth": False,  # Упрощает отладку
+            "default_acl": 'public-read',
+        },
+    },
 }
-
-# Media files configuration
-MEDIA_URL = f'http://localhost:9000/{MINIO_MEDIA_BUCKET}/'
-STATIC_URL = f'http://localhost:9000/{MINIO_STATIC_BUCKET}/'
-
-
-import certifi
-import urllib3
-import os 
-# Custom HTTP Client (OPTIONAL)
-timeout = timedelta(minutes=5).seconds
-ca_certs = certifi.where()
-MINIO_HTTP_CLIENT = urllib3.PoolManager(
-    timeout=urllib3.util.Timeout(connect=timeout, read=timeout),
-    maxsize=10,
-    cert_reqs='CERT_REQUIRED',
-    ca_certs=ca_certs,
-    retries=urllib3.Retry(
-        total=5,
-        backoff_factor=0.2,
-        status_forcelist=[500, 502, 503, 504]
-    )
-)

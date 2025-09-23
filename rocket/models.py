@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django_minio_backend import MinioBackend, iso_date_prefix
+
 
 # python manage.py makemigrations
 # python manage.py migrate
@@ -12,7 +12,7 @@ class LaunchVehicle(models.Model):
     gto_playload = models.IntegerField(verbose_name="Полезная нагрузка (кг)")
     imagerocket = models.ImageField(verbose_name="Изображение",blank=True, null=True,
                                 upload_to="rockets/",
-                                #storage=MinioBackend(bucket_name='django-media'),
+                              
 )
 
     class Meta:
