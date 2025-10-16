@@ -35,6 +35,20 @@
 
 <div class="container my-4">
         <h1 class="text-center mb-4">Ракеты-носители</h1>
+        <form method = "GET" action = "{% url "list_rocket" %}">
+            <div class="mb-3">
+                <input type="text"
+                  name="q" 
+                  placeholder="Поиск по названию или описанию..." 
+                  value="{{ request.GET.q|default:'' }}"
+                 class="form-control">
+                 
+                 <button type="submit" class="btn btn-primary">Найти</button>
+                 {% if request.GET.q %}
+                 <a href="{% url 'list_rocket' %}" class="btn btn-outline-secondary">Сбросить</a>
+                 {% endif %}
+                </div>
+        </form>
         
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
             <!-- Карточка -->
@@ -51,6 +65,10 @@
                             <p class="rocket-description card-text">{{r.gto_playload}} kg</p>
                             <p class="rocket-description card-text">{{r.short_description}}</p>
                         </div>
+                        {% if r.pk not in rockets_reserv_pk %}
+                            <a href="{% url 'request_form' rocket_pk=r.pk %}" class="btn btn-outline-primary">Добавить в расчет</a>
+                        {% endif %}
+            
                     </div>
                 </a>
             </div>

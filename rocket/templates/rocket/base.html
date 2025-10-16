@@ -17,7 +17,7 @@
 
       <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
         <li><a href="{% url "list_rocket" %}" class="nav-link px-2 link-secondary">Главная</a></li>
-        <li><a href="{% url "playload_calculation" %}" class="nav-link px-2 link-dark">Расчет</a></li>
+        {% comment %} <li><a href="{% url "playload_calculation" %}" class="nav-link px-2 link-dark">Расчет</a></li> {% endcomment %}
         <li><a href="{% url "my_calculation" %}" class="nav-link px-2 link-dark">
           Мои расчеты
           {% if user.get_request_count %}
@@ -30,7 +30,9 @@
       </ul>
 
       <div class="col-md-3 text-end">
-        <a type="button" href="{% url "admin:index" %}" class="btn btn-outline-primary me-2">Login</a>
+         <a href="{% url "playload_calculation" %}" class="nav-link px-2 link-secondary">Расчеты</a> 
+
+        {% comment %} <a type="button" href="{% url "admin:index" %}" class="btn btn-outline-primary me-2">Login</a> {% endcomment %}
         {% comment %} <button type="button" class="btn btn-primary">Sign-up</button> {% endcomment %}
       </div>
     </header>

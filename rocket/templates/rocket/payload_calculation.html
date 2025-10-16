@@ -15,11 +15,37 @@
                     <h4 class="card-title mb-0 text-center">
                         <i class="bi bi-rocket me-2"></i>Заявка на расчет
                     </h4>
+                    {% if order_pk %}
+                    <form method="post" action="{% url "delete_calc" order_pk=order_pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger"> Удалить
+                            <i class="bi-calculator"></i> 
+                        </button>
+                    </form>
+                    {% endif %}
                 </div>
                 <div class="card-body p-4">
                 <form method="post">
                     {% csrf_token %}
                     {{ form.as_p }}
+ 
+
+                    {% for r in rockets %}
+                    <div class="card rocket-card h-100 m-3">
+                        <div class="rocket-img-container">
+                            <img {% if r.rocket.imagerocket %} src="{{ r.rocket.imagerocket.url }}" {% endif %}class="rocket-img" 
+                            style="height: 150px; object-fit: cover;" alt={{r.rocket.name}}>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="rocket-name card-title">{{r.rocket.name}}</h5>
+                            <p class="rocket-description card-text">{{r.rocket.gto_playload}} kg</p>
+                            <p class="rocket-description card-text">{{r.rocket.short_description}}</p>
+                        </div>
+                    
+                            <a href="{% url "delete_from_calc" rocket_pk=r.rocket.pk %}" class="btn btn-outline-danger">Удалить</a>
+                        
+                    </div>
+                    {% endfor %}
                     <button type="submit" class="btn btn-danger">
                         <i class="bi-calculator"></i> Рассчитать
                     </button>

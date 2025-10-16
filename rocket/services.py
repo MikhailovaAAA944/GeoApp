@@ -25,7 +25,7 @@ def calculate_payload(launch_vehicle, port):
     try:
         k = settings.PAYLOAD_COEFFICIENT
         payload_gto = launch_vehicle.gto_playload
-        latitude_degrees = port.location
+        latitude_degrees = int(port)
         
         # Конвертируем градусы в радианы
         latitude_radians = math.radians(latitude_degrees)
