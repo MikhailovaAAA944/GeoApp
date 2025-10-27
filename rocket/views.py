@@ -14,12 +14,9 @@ def list_rocket(request):
     query = request.GET.get('q')
     if query : 
         rockets = rockets.filter(name__icontains = query)
-    from django.conf import settings
     return render(request, "rocket/rocket_list.html", context={"rockets": rockets, 
                                                                "rockets_reserv_pk":rockets_reserv_pk,
-                                                                'STATIC_URL': settings.STATIC_URL,
-        'DEBUG': settings.DEBUG,
-        'STATIC_ROOT': settings.STATIC_ROOT,})
+                                                                })
 
 
 def request_form(request, rocket_pk):

@@ -9,7 +9,7 @@ User = get_user_model()
 @property
 def get_user_calc_request_count(self):
     try:
-        result = CalculationRequest.objects.filter(user=self).count()
+        result = CalculationRequest.objects.filter(order__client=self, order__status="Черновик").count()
     except:
         result = 0
     return result

@@ -18,13 +18,6 @@
       <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
         <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
       </a>
-{% with static_dir=STATIC_ROOT %}
-        {% if static_dir.exists %}
-            Папка существует: {{ static_dir }}
-        {% else %}
-            Папка НЕ существует: {{ static_dir }}
-        {% endif %}
-    {% endwith %}
       <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
         <li><a href="{% url "list_rocket" %}" class="nav-link px-2 link-secondary">Главная</a></li>
         {% comment %} <li><a href="{% url "playload_calculation" %}" class="nav-link px-2 link-dark">Расчет</a></li> {% endcomment %}
@@ -54,11 +47,19 @@
         {% endblock %}
 
         <!-- Плавающая кнопка в правом нижнем углу -->
+      
         <div class="position-fixed bottom-0 end-0 m-3">
-            <a class="btn btn-primary rounded-circle p-3" 
-                href="{% url "playload_calculation" %}" >💬
-            </a>
-        </div>
+          <a class="btn btn-primary rounded-circle p-3 position-relative" 
+            href="{% url 'playload_calculation' %}">
+              💬
+              {% if user and user.get_request_count %}
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" 
+                    style="font-size: 0.6em; padding: 0.25em 0.4em; min-width: 1.2em;">
+                  {{ user.get_request_count }}
+              </span>
+              {% endif %}
+          </a>
+      </div>
 
        
     </div>
